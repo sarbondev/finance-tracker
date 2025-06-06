@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const IncomeSchema = new mongoose.Schema({
-  userId: { type: Schema.Types.ObjectId, ref: "User" },
-  amount: Number,
-  source: String,
-  note: String,
+const IncomeSchema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  amount: { type: Number, required: true },
+  source: { type: String, required: true },
+  note: { type: String },
   date: { type: Date, default: Date.now },
 });
 
