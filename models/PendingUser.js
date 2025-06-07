@@ -1,17 +1,18 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 
-const UserSchema = new mongoose.Schema(
+const PendingUserSchema = new Schema(
   {
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    isVerified: { type: Boolean, default: true },
+    verificationCode: { type: String, required: true },
+    expiresAt: { type: Date, default: Date.now, expires: 600 }, // 10 daqiqada o'chadi
   },
   { timestamps: true }
 );
 
-UserSchema.pre("save", async function (next) {
+PendingUserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   try {
     const salt = await bcrypt.genSalt(10);
@@ -22,8 +23,4 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-UserSchema.methods.comparePassword = function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
-
-export default mongoose.model("User", UserSchema);
+export default mongoose.model("PendingUser", PendingUserSchema);

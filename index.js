@@ -2,6 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
+import { cleanupExpiredPendingUsers } from "./controllers/auth.controller.js";
 
 import AuthRoutes from "./routes/auth.routes.js";
 import ExpenseRoutes from "./routes/expense.routes.js";
@@ -16,6 +17,8 @@ app.use(cors());
 app.use(json());
 
 connectDB();
+
+setInterval(cleanupExpiredPendingUsers, 30 * 60 * 1000);
 
 app.get("/", (req, res) =>
   res.send("Personal Finance Tracker API is running!")
