@@ -233,7 +233,6 @@ export const resendVerificationCode = async (req, res) => {
   }
 };
 
-// Email test endpoint
 export const testEmail = async (req, res) => {
   try {
     const isConnected = await testEmailConnection();
